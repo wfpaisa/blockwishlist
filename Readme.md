@@ -1,3 +1,10 @@
+# Update blockwishlist for Prestashop 1.7	 # Update blockwishlist for Prestashop 1.7
+
+Compatibility with Prestashop 1.7. Styles should be adapted manually and Translations too.	 Compatibility with Prestashop 1.7. Styles should be adapted manually and Translations too.
+
+---
+
+
 # Wishlist block
 
 ## About
