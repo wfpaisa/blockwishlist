@@ -1,21 +1,14 @@
-# Update blockwishlist for Prestashop 1.7
+# Wishlist block
 
-Compatibility with Prestashop 1.7. Styles should be adapted manually and Translations too.
-
----
-
-
-## Wishlist block
-
-### About
+## About
 
 Adds a block containing the customer\'s wishlists.
 
-### Contributing
+## Contributing
 
 PrestaShop modules are open-source extensions to the PrestaShop e-commerce solution. Everyone is welcome and even encouraged to contribute with their own improvements.
 
-#### Requirements
+### Requirements
 
 Contributors **must** follow the following rules:
 
@@ -23,7 +16,7 @@ Contributors **must** follow the following rules:
 * Do not update the module's version number.
 * Follow [the coding standards][1].
 
-#### Process in details
+### Process in details
 
 Contributors wishing to edit a module's files should follow the following process:
 

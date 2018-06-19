@@ -349,6 +349,12 @@ class WishList extends ObjectModel
 			else
 				$products[$i]['attribute_quantity'] = $products[$i]['product_quantity'];
 		}
+		
+		// $productx = new Product(13);
+		// $link = $productx->getLink();
+
+		// print_r($link);
+
 		return ($products);
 	}
 

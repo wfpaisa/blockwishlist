@@ -1,0 +1,8 @@
+/* Products add to wishlist */
+#wishlist_button{ cursor: pointer; }
+
+.wishlist-list-add{margin:0px; padding:0px 10px 0px 0px; }
+.wishlist-list-add li{ cursor: pointer; padding: 4px 0px; margin-left: -4px;}
+.wishlist-list-add li:hover{ color:#0bb8fd; }
+.wishlist-list-add li i{ vertical-align: middle; margin-top:-3px; }
+
