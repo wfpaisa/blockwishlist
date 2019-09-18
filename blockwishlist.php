@@ -224,7 +224,7 @@ class BlockWishList extends Module
 
 		
 		$this->smarty->assign(array(
-			'wishlists' => (isset($cookie->id_customer)? WishList::getByIdCustomer($cookie->id_customer): false),
+			'wishlists' => (isset($cookie->id_customer)? WishList::getByIdCustomer($cookie->id_customer): []),
 		));
 		
 
