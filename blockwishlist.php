@@ -1,28 +1,4 @@
 <?php
-/*
-* 2007-2016 PrestaShop
-*
-* NOTICE OF LICENSE
-*
-* This source file is subject to the Academic Free License (AFL 3.0)
-* that is bundled with this package in the file LICENSE.txt.
-* It is also available through the world-wide-web at this URL:
-* http://opensource.org/licenses/afl-3.0.php
-* If you did not receive a copy of the license and are unable to
-* obtain it through the world-wide-web, please send an email
-* to license@prestashop.com so we can send you a copy immediately.
-*
-* DISCLAIMER
-*
-* Do not edit or add to this file if you wish to upgrade PrestaShop to newer
-* versions in the future. If you wish to customize PrestaShop for your
-* needs please refer to http://www.prestashop.com for more information.
-*
-*  @author PrestaShop SA <contact@prestashop.com>
-*  @copyright  2007-2016 PrestaShop SA
-*  @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
-*  International Registered Trademark & Property of PrestaShop SA
-*/
 
 if (!defined('_PS_VERSION_'))
 	exit;
@@ -51,7 +27,7 @@ class BlockWishList extends Module
 		$this->displayName = $this->l('Wishlist block');
 		$this->description = $this->l('Adds a block containing the customer\'s wishlists.');
 		$this->default_wishlist_name = $this->l('My wishlist');
-		$this->ps_versions_compliancy = array('min' => '1.6', 'max' => '1.6.99.99');
+		$this->ps_versions_compliancy = array('min' => '1.6', 'max' => _PS_VERSION_);
 		$this->html = '';
 	}
 
@@ -171,7 +147,7 @@ class BlockWishList extends Module
 				array(
 					'id_wishlist' => $id_wishlist,
 					'isLogged' => true,
-					'wishlist_products' => ($id_wishlist == false ? false : WishList::getProductByIdCustomer($id_wishlist,
+					'wishlist_products' => ($id_wishlist == false ? [] : WishList::getProductByIdCustomer($id_wishlist,
 						$this->context->customer->id, $this->context->language->id, null, true)),
 					'wishlists' => $wishlists,
 					'ptoken' => Tools::getToken(false)
@@ -181,13 +157,19 @@ class BlockWishList extends Module
 		else
 			$this->smarty->assign(array('wishlist_products' => false, 'wishlists' => false));
 
+		
+		// Media::addJsDef(array('pepito' => 'xxxx'));
+
 		return $this->display(__FILE__, 'blockwishlist_top.tpl');
 	}
 
 	public function hookHeader($params)
 	{
-		$this->context->controller->addCSS(($this->_path).'blockwishlist.css', 'all');
-		$this->context->controller->addJS(($this->_path).'js/ajax-wishlist.js');
+		// $this->context->controller->addCSS(($this->_path).'blockwishlist.css', 'all');
+		$this->context->controller->registerStylesheet('modules-blockwishlist', 'modules/'.$this->name.'/views/css/blockwishlist.css', ['media' => 'all', 'priority' => 150]);
+
+		// $this->context->controller->addJS(($this->_path).'js/ajax-wishlist.js');
+		$this->context->controller->registerJavascript('modules-blockwishlist', 'modules/'.$this->name.'/views/js/ajax-wishlist.js', ['position' => 'bottom', 'priority' => 150]);
 
 		$this->smarty->assign(array('wishlist_link' => $this->context->link->getModuleLink('blockwishlist', 'mywishlist')));
 	}
@@ -240,10 +222,11 @@ class BlockWishList extends Module
 			'id_product' => (int)Tools::getValue('id_product'),
 		));
 
-		if (isset($cookie->id_customer))
-			$this->smarty->assign(array(
-				'wishlists' => WishList::getByIdCustomer($cookie->id_customer),
-			));
+		
+		$this->smarty->assign(array(
+			'wishlists' => (isset($cookie->id_customer)? WishList::getByIdCustomer($cookie->id_customer): []),
+		));
+		
 
 		return ($this->display(__FILE__, 'blockwishlist-extra.tpl'));
 	}
