@@ -108,7 +108,7 @@ if ($context->customer->isLogged())
 			$productBoughts = array();
 
 			foreach ($products as $product)
-				if (sizeof($product['bought']))
+				if ($product['bought'])
 					$productBoughts[] = $product;
 			$context->smarty->assign(array(
 					'products' => $products,
