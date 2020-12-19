@@ -50,6 +50,7 @@ class BlockWishList extends Module
 		if (!parent::install() ||
 			!$this->registerHook('rightColumn') ||
 			!$this->registerHook('productActions') ||
+            !$this->registerHook('productAdditionalInfo') ||
 			!$this->registerHook('cart') ||
 			!$this->registerHook('customerAccount') ||
 			!$this->registerHook('header') ||
@@ -219,15 +220,21 @@ class BlockWishList extends Module
 		$cookie = $params['cookie'];
 
 		$this->smarty->assign(array(
-			'id_product' => (int)Tools::getValue('id_product'),
+			'id_product' => Tools::getValue('id_product'),
 		));
 
-		
 		$this->smarty->assign(array(
 			'wishlists' => (isset($cookie->id_customer)? WishList::getByIdCustomer($cookie->id_customer): false),
 		));
-		
 
+		if ($this->context->customer->isLogged()) {
+			$this->smarty->assign(array(
+				'id_product_home' => $params['id_product'],
+			));
+			
+			$this->smarty->assign('productInWishlist', Wishlist::isInWishList($this->context->customer->id, $this->context->language->id, $params['id_product']));
+		}
+		
 		return ($this->display(__FILE__, 'blockwishlist-extra.tpl'));
 	}
 
