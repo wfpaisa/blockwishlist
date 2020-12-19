@@ -349,8 +349,43 @@ class WishList extends ObjectModel
 			else
 				$products[$i]['attribute_quantity'] = $products[$i]['product_quantity'];
 		}
+		
+		// $productx = new Product(13);
+		// $link = $productx->getLink();
+
+		// print_r($link);
+		
 		return ($products);
 	}
+    
+    /**
+	 * Return true if product is in any wishlist else false
+	 *
+	 * @return boolean productInWishlist
+	 */
+    public static function isInWishlist($id_customer, $id_lang, $id_prod)
+    {        
+        $productInWishlist = [false, false];
+        $wishlistsId = [];
+        /* Get every wishlist ID */
+        foreach(Wishlist::getByIdCustomer($id_customer) as $wishL) {
+            $wishlistsId[] .= $wishL['id_wishlist'];
+        }
+        
+        /* For each wishlist ID check if current ID product == ID product already in any wishlist */
+        foreach($wishlistsId as $id) {
+            foreach(Wishlist::getProductByIdCustomer($id, $id_customer, $id_lang) as $singleProduct) {
+				if (Tools::getValue('id_product') == $singleProduct['id_product']) {
+                    $productInWishlist[0] = true; 
+				}
+				
+				if ((int)$id_prod == (int)$singleProduct['id_product']) {
+                    $productInWishlist[1] = true; 
+                }
+            }
+        }
+        return $productInWishlist;
+    }
 
 	/**
 	 * Get Wishlists number products by Customer ID

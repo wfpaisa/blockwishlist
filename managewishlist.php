@@ -55,6 +55,7 @@ if ($context->customer->isLogged())
 
 			$products = WishList::getProductByIdCustomer($id_wishlist, $context->customer->id, $context->language->id);
 			$bought = WishList::getBoughtProduct($id_wishlist);
+			$link = new Link();
 
 			for ($i = 0; $i < sizeof($products); ++$i)
 			{
@@ -66,12 +67,18 @@ if ($context->customer->isLogged())
 					if ($products[$i]['id_product_attribute'] != 0)
 					{
 						$combination_imgs = $obj->getCombinationImages($context->language->id);
-						if (isset($combination_imgs[$products[$i]['id_product_attribute']][0]))
-							$products[$i]['cover'] = $obj->id.'-'.$combination_imgs[$products[$i]['id_product_attribute']][0]['id_image'];
+						if (isset($combination_imgs[$products[$i]['id_product_attribute']][0])){
+
+							$coverImg = $obj->id.'-'.$combination_imgs[$products[$i]['id_product_attribute']][0]['id_image'];
+							$products[$i]['image_link'] = $link->getImageLink($products[$i]['link_rewrite'], $coverImg, 'home_default');
+
+						}
 						else
 						{
 							$cover = Product::getCover($obj->id);
-							$products[$i]['cover'] = $obj->id.'-'.$cover['id_image'];
+							$coverImg = $obj->id.'-'.$cover['id_image'];
+							$products[$i]['image_link'] = $link->getImageLink($products[$i]['link_rewrite'], $coverImg, 'home_default');
+							
 						}
 					}
 					else
@@ -80,12 +87,14 @@ if ($context->customer->isLogged())
 						foreach ($images AS $k => $image)
 							if ($image['cover'])
 							{
-								$products[$i]['cover'] = $obj->id.'-'.$image['id_image'];
+								$coverImg = $obj->id.'-'.$image['id_image'];
+								$products[$i]['image_link'] = $link->getImageLink($products[$i]['link_rewrite'], $coverImg, 'home_default');
+
 								break;
 							}
 					}
-					if (!isset($products[$i]['cover']))
-						$products[$i]['cover'] = $context->language->iso_code.'-default';
+					if (!isset($products[$i]['image_link']))
+						$products[$i]['image_link'] = 'img/p/'.$context->language->iso_code.'-default-home_default.jpg';
 				}
 				$products[$i]['bought'] = false;
 				for ($j = 0, $k = 0; $j < sizeof($bought); ++$j)
